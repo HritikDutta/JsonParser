@@ -50,6 +50,15 @@ namespace JSON
     Value::Value(Value&& other)
     :   type(other.type), Int(std::move(other.Int)) {}
 
+    Value::~Value()
+    {
+        switch (type)
+        {
+            case Type::String: if (String) delete String; break;
+            case Type::Object: if (Object) delete Object; break;
+            case Type::Array : if (Array)  delete Array;  break;
+        }
+    }
 
     inline Value&
     Value::operator=(Value&& rhs)
