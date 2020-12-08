@@ -51,7 +51,8 @@ namespace JSON
         Value(JSONArray* a);
         Value(Type forceType);
         Value(Value&& other);
-        ~Value();
+        
+        inline void Free();
 
         inline Value& operator=(Value&& rhs);
         inline Value& operator[](u64 idx);

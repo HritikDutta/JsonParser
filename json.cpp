@@ -50,13 +50,35 @@ namespace JSON
     Value::Value(Value&& other)
     :   type(other.type), Int(std::move(other.Int)) {}
 
-    Value::~Value()
+    inline void
+    Value::Free()
     {
         switch (type)
         {
-            case Type::String: if (String) delete String; break;
-            case Type::Object: if (Object) delete Object; break;
-            case Type::Array : if (Array)  delete Array;  break;
+            case Type::String:
+                if (String)
+                {
+                    delete String; 
+                }
+                break;
+            case Type::Object:
+                if (Object)
+                {
+                    for (auto& it : *Object)
+                        it.second.Free();
+
+                    delete Object;
+                }
+                break;
+            case Type::Array:
+                if (Array)
+                {
+                    for (Value& it : *Array)
+                        it.Free();
+
+                    delete Array;
+                }
+                break;
         }
     }
 
